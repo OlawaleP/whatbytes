@@ -1,10 +1,8 @@
-
 import React from "react";
 import { TestResult } from "../../types";
 import Card from "../UI/Card";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-// Fix 1: Make sure we're only accepting the data prop of TestResult type
 const QuestionAnalysis: React.FC<{ data: TestResult }> = ({ data }) => {
   const pieData = [
     { name: "Correct", value: data.correctAnswers },
