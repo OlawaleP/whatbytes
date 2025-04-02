@@ -5,7 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen: boolean;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const pathname = usePathname();
 
   const navItems = [
@@ -26,8 +30,14 @@ const Sidebar: React.FC = () => {
     },
   ];
 
+  const sidebarClasses = `
+    transition-all duration-300 bg-white border-r-2
+    ${isOpen ? 'fixed top-16 left-0 bottom-0 z-40 w-64' : 'hidden'} 
+    md:static md:block md:w-64
+  `;
+
   return (
-    <aside className="w-64 bg-white border-r-2 hidden md:block">
+    <aside className={sidebarClasses}>
       <div className="pr-4 py-4">
         <nav className="mt-6">
           <ul className="space-y-3">

@@ -10,3 +10,4 @@ export { default as QuestionAnalysis } from './Dashboard/QuestionAnalysis';
 export { default as FormField } from './Form/FormField';
 export { default as QuickStats } from './Dashboard/QuickStats';
 export { default as SyllabusAnalysis } from './Dashboard/SyllabusAnalysis';
+export { default as HamburgerToggle } from './UI/HambuggerToggle';

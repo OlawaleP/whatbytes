@@ -35,3 +35,9 @@ body {
   filter: invert(40%) sepia(85%) saturate(1200%) hue-rotate(210deg) brightness(100%) contrast(95%);
   transition: filter 0.2s ease-in-out;
 }
+
+@media (max-width: 425px) {
+  .sm-no-transition * {
+    transition: none !important;
+  }
+}

@@ -10,15 +10,29 @@ const FormField: React.FC<FormFieldProps> = ({
   onChange,
   type = "text",
   min,
-  max
+  max,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [touched, setTouched] = useState(false);
   const [isEmpty, setIsEmpty] = useState(value === "" || value === null || value === undefined);
+  const [windowWidth, setWindowWidth] = useState<number>(
+    typeof window !== 'undefined' ? window.innerWidth : 0
+  );
 
   useEffect(() => {
     setIsEmpty(value === "" || value === null || value === undefined);
   }, [value]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
+      
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
 
   const isValid = () => {
     if (isEmpty) return false; 
@@ -74,6 +88,12 @@ const FormField: React.FC<FormFieldProps> = ({
     ? "border-blue-700 ring-1 ring-blue-700" 
     : "border-red-500 ring-1 ring-red-500";
 
+  const shouldTransition = windowWidth > 425;
+  
+  const transitionClass = shouldTransition 
+    ? `transition-transform duration-200 ${isFocused ? '-translate-x-8' : ''}` 
+    : '';
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
       <div className="flex items-center gap-2">
@@ -85,7 +105,7 @@ const FormField: React.FC<FormFieldProps> = ({
         </label>
       </div>
       <div className="relative w-full sm:w-40">
-        <div className={`relative transition-transform duration-200 ${isFocused ? '-translate-x-8' : ''}`}>
+        <div className={`relative ${transitionClass}`}>
           <input
             type={type}
             name={name}

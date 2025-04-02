@@ -82,7 +82,7 @@ const UpdateScoreModal: React.FC<UpdateScoreModalProps> = ({
             className="w-6 h-6" 
           />
         </div>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 sm-no-transition">
           {formFields.map((field) => (
             <FormField
               key={field.name}
@@ -90,9 +90,9 @@ const UpdateScoreModal: React.FC<UpdateScoreModalProps> = ({
               label={field.label}
               boldText={field.boldText}
               name={field.name}
-              value={field.value as 'text' | 'number'}
+              value={field.value as string | number}
               onChange={handleChange}
-              type={field.type as 'text' | 'number'}
+              type={field.type as "text" | "number"}
               min={field.min}
               max={field.max}
             />
