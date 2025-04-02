@@ -1,62 +1,72 @@
-import React from 'react';
+import { TestResult } from "@/types";
+import Card from "../UI/Card";
 
-interface QuickStatisticsProps {
-  rank: number;
-  percentile: number;
-  correctAnswers: number;
-  totalQuestions: number;
+interface QuickStatsProps {
+  data: TestResult;
 }
 
-const QuickStatistics = ({
-  rank,
-  percentile,
-  correctAnswers,
-  totalQuestions,
-}: QuickStatisticsProps) => {
+interface StatItemProps {
+  icon: string;
+  iconColor?: string;
+  value: React.ReactNode;
+  label: string;
+  isLast?: boolean;
+}
+
+const StatItem: React.FC<StatItemProps> = ({ icon, iconColor = "", value, label, isLast = false }) => {
   return (
-    <div>
-      <h3 className="font-medium text-lg mb-4">Quick Statistics</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center mr-3">
-              <span className="text-amber-500">🏆</span>
-            </div>
-            <div>
-              <div className="text-2xl font-semibold">{rank}</div>
-              <div className="text-xs text-gray-500">YOUR RANK</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
-              <span className="text-gray-500 text-xs">📄</span>
-            </div>
-            <div>
-              <div className="text-2xl font-semibold">{percentile}%</div>
-              <div className="text-xs text-gray-500">PERCENTILE</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg border border-gray-200 flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
-              <span className="text-green-500 text-xs">✓</span>
-            </div>
-            <div>
-              <div className="text-2xl font-semibold">
-                {correctAnswers} / {totalQuestions}
-              </div>
-              <div className="text-xs text-gray-500">CORRECT ANSWERS</div>
-            </div>
-          </div>
-        </div>
+    <div className={`flex items-center gap-3 w-full sm:w-auto ${!isLast ? "border-b sm:border-b-0 sm:border-r border-gray-300 pb-4 sm:pb-0 sm:pr-4" : ""}`}>
+      <div>
+        <span className={`${iconColor} border-2 rounded-full p-3 bg-slate-100 inline-flex items-center justify-center`}>
+          <img src={icon} alt="icon" className="w-5 h-5" />
+        </span>
+      </div>
+      <div>
+        <p className={typeof value === "string" ? "text-statText font-bold" : "text-statText font-bold"}>{value}</p>
+        <p className="text-sm text-gray-400">{label}</p>
       </div>
     </div>
   );
 };
 
-export default QuickStatistics;
+const QuickStats: React.FC<QuickStatsProps> = ({ data }) => {
+  const stats = [
+    {
+      icon: "/trophy.svg",
+      iconColor: "text-amber-500",
+      value: data.rank,
+      label: "YOUR RANK"
+    },
+    {
+      icon: "/note.svg",
+      value: <span className="text-primary">{data.percentile}%</span>,
+      label: "PERCENTILE"
+    },
+    {
+      icon: "/check.svg",
+      iconColor: "text-green-500",
+      value: `${data.correctAnswers} / ${data.totalQuestions}`,
+      label: "CORRECT ANSWERS",
+      isLast: true
+    }
+  ];
+
+  return (
+    <Card title="Quick Statistics">
+      <div className="flex flex-col sm:flex-row items-center justify-between px-4 gap-4 sm:gap-0">
+        {stats.map((stat, index) => (
+          <StatItem
+            key={index}
+            icon={stat.icon}
+            iconColor={stat.iconColor}
+            value={stat.value}
+            label={stat.label}
+            isLast={stat.isLast}
+          />
+        ))}
+      </div>
+    </Card>
+  );
+};
+
+export default QuickStats;

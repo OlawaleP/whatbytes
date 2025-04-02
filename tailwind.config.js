@@ -16,6 +16,11 @@ module.exports = {
         light: "#F9FAFB",
         textPrimary: "#000000"
       },
+      fontSize: {
+        statText: "1.5rem",
+        percentValue: "1.25rem",
+        errorText: "10px"
+      }
     },
   },
   plugins: [],

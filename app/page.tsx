@@ -1,16 +1,11 @@
 "use client"
-import React, { useState } from "react";
-import Head from "next/head";
-import Header from "../components/Layout/Header";
-import Sidebar from "../components/Layout/Sidebar";
-import QuickStats from "../components/Dashboard/QuickStats";
-import SyllabusAnalysis from "../components/Dashboard/SyllabusAnalysis";
-import QuestionAnalysis from "../components/Dashboard/QuestionAnalysis";
-import UpdateScoreModal from "../components/Dashboard/UpdateScoreModal";
-import { SYLLABUS_DATA, TEST_DATA } from "@/utils/constant";
-import ComparisonGraph from "@/components/Dashboard/ComparisionGraph";
 
-const Dashboard: React.FC = () => {
+import { useState } from "react";
+import Head from "next/head";
+import { SYLLABUS_DATA, TEST_DATA } from "@/utils/constant";
+import { UpdateScoreModal, QuestionAnalysis, QuickStats, Sidebar, Header, ComparisionGraph, TestHeader, SyllabusAnalysis } from "@/components";
+
+const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [testData, setTestData] = useState(TEST_DATA);
 
@@ -41,34 +36,19 @@ const Dashboard: React.FC = () => {
           <Sidebar />
           
           <main className="flex-1 p-6">
-            <div className="mb-6">
-              <h2 className="">Skill Test</h2>
-              <div className="flex items-center text-sm text-gray-500 mt-1">
-                <span>{testData.title}</span>
-                <span className="mx-2">•</span>
-                <span>Questions: {testData.questions}</span>
-                <span className="mx-2">•</span>
-                <span>Duration: {testData.duration}</span>
-                <span className="mx-2">•</span>
-                <span>Submitted on {testData.submittedOn}</span>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-1">
-                <QuickStats
-                  data={testData}
-                  onUpdateClick={() => setIsModalOpen(true)}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="space-y-6">
+                <TestHeader 
+                  data={testData} 
+                  onUpdateClick={() => setIsModalOpen(true)} 
                 />
+                <QuickStats data={testData} />
+                <ComparisionGraph data={testData} />
               </div>
               
-              <div className="lg:col-span-2 space-y-6">
-                <ComparisonGraph data={testData} />
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <SyllabusAnalysis data={SYLLABUS_DATA} />
-                  <QuestionAnalysis data={testData} />
-                </div>
+              <div className="space-y-6">
+                <SyllabusAnalysis data={SYLLABUS_DATA} />
+                <QuestionAnalysis data={testData} />
               </div>
             </div>
           </main>

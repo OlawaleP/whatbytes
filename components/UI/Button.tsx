@@ -5,6 +5,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   icon?: ReactNode;
+  iconPosition?: 'left' | 'right';
 }
 
 const Button = ({
@@ -12,15 +13,16 @@ const Button = ({
   variant = 'primary',
   size = 'md',
   icon,
+  iconPosition = 'left',
   className = '',
   ...props
 }: ButtonProps) => {
-  const baseClasses = 'font-medium rounded-lg inline-flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const baseClasses = 'font-medium rounded-lg inline-flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black';
   
   const variantClasses = {
-    primary: 'bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-500',
-    secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500',
-    outline: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-blue-500',
+    primary: 'bg-blue-700 text-white hover:bg-blue-800 border border-black',
+    secondary: 'bg-gray-50 text-gray-800 hover:bg-gray-200 border border-black',
+    outline: 'bg-white text-gray-700 border border-black hover:bg-gray-50',
   };
   
   const sizeClasses = {
@@ -34,8 +36,9 @@ const Button = ({
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       {...props}
     >
-      {icon && <span className="mr-2">{icon}</span>}
+      {icon && iconPosition === 'left' && <span className="mr-2">{icon}</span>}
       {children}
+      {icon && iconPosition === 'right' && <span className="ml-2">{icon}</span>}
     </button>
   );
 };

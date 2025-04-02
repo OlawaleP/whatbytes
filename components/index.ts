@@ -1,0 +1,12 @@
+export { default as UpdateScoreModal } from './Modals/UpdateScoreModal';
+export { default as Card } from './UI/Card';
+export { default as Button } from './UI/Button';
+export { default as Header } from './Layout/Header';
+export { default as Sidebar } from './Layout/Sidebar';
+export { default as ArrowRightIcon } from './Icons/ArrowRight';
+export { default as ComparisionGraph } from './Dashboard/ComparisionGraph';
+export { default as TestHeader } from './Dashboard/Header';
+export { default as QuestionAnalysis } from './Dashboard/QuestionAnalysis';
+export { default as FormField } from './Form/FormField';
+export { default as QuickStats } from './Dashboard/QuickStats';
+export { default as SyllabusAnalysis } from './Dashboard/SyllabusAnalysis';

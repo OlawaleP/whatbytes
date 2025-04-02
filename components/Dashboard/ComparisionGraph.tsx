@@ -1,110 +1,69 @@
-import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+import React from "react";
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  Tooltip, 
+  ResponsiveContainer,
+  ReferenceLine
+} from "recharts";
+import { TestResult } from "../../types";
+import { distributionData } from "@/utils/constant";
+import { Card } from "..";
 
-interface ComparisonGraphProps {
-  percentile: number;
-}
-
-const ComparisonGraph = ({ percentile }: ComparisonGraphProps) => {
-  // Generate bell curve data points
-  const generateBellCurveData = () => {
-    const data = [];
-    const mean = 50;
-    const stdDev = 15;
-    const pointCount = 20;
-
-    for (let i = 0; i <= 100; i += 5) {
-      const x = i;
-      // Normal distribution formula
-      const y = 
-        100 * Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2)) / 
-        (stdDev * Math.sqrt(2 * Math.PI));
-      
-      data.push({ x, y });
-    }
-    return data;
-  };
-
-  const bellCurveData = generateBellCurveData();
-
+const ComparisonGraph: React.FC<{ data: TestResult }> = ({ data }) => {
   return (
-    <div>
-      <h3 className="font-medium text-lg mb-2">Comparison Graph</h3>
-      <p className="text-sm text-gray-600 mb-4">
-        You scored {percentile}% percentile which is {percentile > 72 ? 'higher' : 'lower'} than the
-        average percentile 72% of all the engineers who took this assessment
-      </p>
+    <Card title="Comparison Graph">
+      <div className="relative">
       
-      <div className="h-64 relative">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={bellCurveData}>
-            <defs>
-              <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#6366F1" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#6366F1" stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-            <XAxis 
-              dataKey="x" 
-              type="number" 
-              domain={[0, 100]} 
-              tickCount={6} 
-            />
-            <YAxis hide />
-            <Area 
-              type="monotone" 
-              dataKey="y" 
-              stroke="#6366F1" 
-              fillOpacity={1} 
-              fill="url(#colorValue)" 
-              dot={(props) => {
-                const { cx, cy, index } = props;
-                const xValue = bellCurveData[index].x;
-                
-                // Only show dots at specific points
-                if (index % 3 === 0 || xValue === percentile) {
-                  return (
-                    <circle 
-                      cx={cx} 
-                      cy={cy} 
-                      r={3} 
-                      fill={xValue === percentile ? "#4F46E5" : "#6366F1"} 
-                      stroke="#fff" 
-                      strokeWidth={1} 
-                    />
-                  );
-                }
-                return null;
-              }}
-            />
-            {/* Mark user's percentile */}
-            {percentile && (
-              <line 
-                x1={`${percentile}%`} 
-                y1="0%" 
-                x2={`${percentile}%`} 
-                y2="100%" 
-                stroke="#4F46E5" 
-                strokeWidth={1} 
-                strokeDasharray="3 3" 
-              />
-            )}
-          </AreaChart>
-        </ResponsiveContainer>
+        <span className="absolute -top-4 right-0 border-2 rounded-full p-3 bg-slate-100">
+          <img src="/stats.svg" alt="icon" className="w-5 h-5" />
+        </span>
         
-        {/* Percentile marker */}
-        <div 
-          className="absolute text-sm text-indigo-600"
-          style={{ 
-            right: '10%', 
-            top: '40%',
-          }}
-        >
-          your percentile
+        <h2 className="text-lg font-bold mb-2"></h2>
+        <p className="text-gray-600 mb-6 mt-8">
+          <span className="font-bold">You scored {data.percentile}% percentile</span> which is{" "}
+          {data.percentile > data.averagePercentile ? "higher" : "lower"} than <br/>the
+          average percentile {data.averagePercentile}% of all the engineers who took this assessment
+        </p>
+        
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={distributionData}
+              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            >
+              <XAxis 
+                dataKey="percentile" 
+                domain={[0, 100]}
+                ticks={[0, 25, 50, 75, 100]} 
+              />
+              <YAxis hide />
+              <Tooltip formatter={(value) => [`${value} noOfStudents`]} />
+              <Line 
+                type="monotone" 
+                dataKey="frequency" 
+                stroke="#8884d8" 
+                dot={{ stroke: '#8884d8', strokeWidth: 1, r: 3 }}
+                activeDot={{ r: 5 }} 
+              />
+              <ReferenceLine 
+                x={data.percentile} 
+                stroke="#d1d5db" 
+                label={{ 
+                  value: "your percentile", 
+                  position: "middle", 
+                  fill: "#374151", 
+                  fontSize: 12,
+                  fontWeight: "regular"
+                }} 
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 
